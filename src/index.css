@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  user-select: none;
+  background-color: #2d3748; /* bg-gray-800 in TailwindCSS */
+  font-family: sans-serif; /* font-sans in TailwindCSS */
+  font-weight: bold; /* font-bold in TailwindCSS */
+}
