@@ -5,7 +5,7 @@ export default function App() {
         <main className="h-screen">
             <div className="flex flex-col items-center justify-center h-full">
                 <div className="w-2/3 md:w-2/6 lg:w-1/6 xl:w-1/6">
-
+                    <img src={"./img/logo.png"} alt={"Trivia Quiz"}/>
                     <div className={"py-2 px-4 text-3xl text-center text-white font-sans font-bold"}>Trivia Quiz</div>
                 </div>
                 <Button
