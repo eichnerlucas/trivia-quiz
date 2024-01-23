@@ -19,14 +19,25 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
     }
 
     useEffect(() => {
-        fetch(`https://opentdb.com/api.php?amount=10&category=${selectedCategory}&difficulty=${difficulty}&type=multiple`)
-            .then(response => response.json())
-            .then((data) => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`https://opentdb.com/api.php?amount=10&category=${selectedCategory}&difficulty=${difficulty}&type=multiple`);
+                if (response.status === 429) {
+                    console.log('Rate limit hit - waiting to retry.');
+                    setTimeout(fetchData, 3000); // Retry after 2 seconds
+                    return;
+                }
+
+                const data = await response.json();
                 setQuestions(data.results)
-                setCorrectAnswer(data.results[currentQuestion].correct_answer)
-                setAnswers(shuffle([...data.results[currentQuestion].incorrect_answers, data.results[currentQuestion].correct_answer]))
-            })
-            .catch(error => console.error('Error:', error));
+                setCorrectAnswer(data.results[currentQuestion].correct_answer);
+                setAnswers(shuffle([...data.results[currentQuestion].incorrect_answers, data.results[currentQuestion].correct_answer]));
+            } catch(error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchData();
     }, [selectedCategory, difficulty]);
 
     const handleAnswerOptionClick = (answer) => {
@@ -41,6 +52,9 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
             setAnswers(shuffle([...questions[nextQuestion].incorrect_answers, questions[nextQuestion].correct_answer]));
         } else {
             alert(`You scored ${score} out of ${questions.length}`);
+            setTimeout(() => {
+                window.location.reload();
+            });
         }
     };
 
