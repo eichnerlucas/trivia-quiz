@@ -54,7 +54,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
             alert(`You scored ${score} out of ${questions.length}`);
             setTimeout(() => {
                 window.location.reload();
-            });
+            }, 4000);
         }
     };
 
