@@ -7,6 +7,7 @@ export default function Start() {
     const [ difficulty, setDifficulty ] = useState('easy');
     const [categories, setCategories] = useState([]);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const isValid = Boolean(username && difficulty && selectedCategory);
 
@@ -24,6 +25,7 @@ export default function Start() {
             .then((data) => {
                 setCategories(data.trivia_categories);
                 setSelectedCategory(data.trivia_categories[0].id);
+                setIsLoading(false);
             });
     }, []);
 
@@ -45,17 +47,23 @@ export default function Start() {
                     onChange={(e) => setUsername(e.target.value)}
                 />
 
-                <select
-                    className="w-full m-1 py-2 px-4 text-center font-semibold rounded-lg shadow-md text-white bg-amber-400 hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent cursor-pointer  "
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                    {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
+                { isLoading ?
+                    <select disabled className="w-full m-1 py-2 px-4 text-center font-semibold rounded-lg shadow-md text-white bg-amber-400 hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent cursor-pointer">
+                        <option>Loading...</option>
+                    </select>
+                    :
+                    <select
+                        className="w-full m-1 py-2 px-4 text-center font-semibold rounded-lg shadow-md text-white bg-amber-400 hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent cursor-pointer"
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                }
 
                 <select
                     className="w-full m-1 py-2 text-center font-semibold rounded-lg shadow-md text-white bg-amber-400 hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent cursor-pointer"
