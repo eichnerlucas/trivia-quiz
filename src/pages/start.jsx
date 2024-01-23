@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Quiz from "./quiz";
+import Logo from "../components/logo";
 
 export default function Start() {
     const [ username, setUsername ] = useState('');
@@ -34,9 +35,7 @@ export default function Start() {
             ? <Quiz username={username} selectedCategory={selectedCategory} difficulty={difficulty}/>
             : (
         <div className="flex flex-col items-center justify-center h-screen">
-            <div className="w-full flex justify-center">
-                <img src={"./img/logo.png"} alt={"Trivia Quiz"}/>
-            </div>
+            <Logo />
 
             <div className="lg:w-1/6 md:w-1/3 sm:w-full">
             <input

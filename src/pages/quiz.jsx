@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Logo from "../components/logo";
 
 export default function Quiz({ username, selectedCategory, difficulty }) {
     const [questions, setQuestions] = useState([]);
@@ -49,18 +50,18 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
     };
 
     return (
-        <div>
-            <h1>Quiz</h1>
-            <p>Username: {username}</p>
-            <p>Selected Category: {selectedCategory}</p>
-            <p>Difficulty: {difficulty}</p>
+        <div className="flex flex-col items-center p-6 rounded-md">
+            <Logo />
             {questions && questions.length > 0 ? (
-                <div key={questions[currentQuestion].question}>
-                    <h2>Question {currentQuestion + 1}: </h2>
-                    <p>{decodeHTMLEntities(questions[currentQuestion].question)}</p>
-                    <div>
+                <div
+                    className="flex flex-col items-center bg-gray-800 min-w-96 max-w-96 overflow-auto p-6 mt-4 rounded-md shadow-sm">
+                    <h2 className="text-lg text-white font-bold">Question {currentQuestion + 1}:</h2>
+                    <p className="mt-2 text-white text-center">{decodeHTMLEntities(questions[currentQuestion].question)}</p>
+                    <div className="flex flex-col w-full mt-4">
                         {answers.map((answer, index) => (
-                            <button key={index} onClick={() => handleAnswerOptionClick(answer)}>
+                            <button
+                                className={`w-full py-2 px-4 bg-amber-400 hover:bg-amber-600 text-white font-semibold rounded-lg mt-2`}
+                                key={index} onClick={() => handleAnswerOptionClick(answer)}>
                                 {decodeHTMLEntities(answer)}
                             </button>
                         ))}
