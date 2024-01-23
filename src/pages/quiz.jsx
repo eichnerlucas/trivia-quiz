@@ -69,8 +69,11 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
                     <div className="flex flex-col w-full mt-4">
                         {answers.map((answer, index) => (
                             <button
-                                className={`w-full py-2 px-4 bg-amber-400 hover:bg-amber-600 text-white font-semibold rounded-lg mt-2`}
-                                key={index} onClick={() => handleAnswerOptionClick(answer)}>
+                                className={`w-full py-2 px-4 bg-amber-400 text-white font-semibold rounded-lg mt-2`}
+                                key={index}
+                                onClick={() => handleAnswerOptionClick(answer)}
+                                onTouchStart={(event) => event.currentTarget.blur()}
+                            >
                                 {decodeHTMLEntities(answer)}
                             </button>
                         ))}
