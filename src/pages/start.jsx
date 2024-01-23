@@ -12,7 +12,7 @@ export default function Start() {
 
     const handleClick = (evt) => {
         if (!isValid) {
-            evt.preventDefault();
+            return evt.preventDefault();
         }
 
         setIsButtonClicked(true)
