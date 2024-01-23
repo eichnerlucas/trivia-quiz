@@ -14,7 +14,6 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
         return dom.body.textContent;
     }
 
-    // Function to shuffle the array
     const shuffle = (array) => {
         return array.sort(() => Math.random() - 0.5);
     }
@@ -24,10 +23,8 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
             .then(response => response.json())
             .then((data) => {
                 setQuestions(data.results)
-
-                const shuffledAnswers = shuffle([...data.results[currentQuestion].incorrect_answers, data.results[currentQuestion].correct_answer]);
                 setCorrectAnswer(data.results[currentQuestion].correct_answer)
-                setAnswers(shuffledAnswers)
+                setAnswers(shuffle([...data.results[currentQuestion].incorrect_answers, data.results[currentQuestion].correct_answer]))
             })
             .catch(error => console.error('Error:', error));
     }, [selectedCategory, difficulty]);
@@ -41,9 +38,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
         if (nextQuestion < questions.length) {
             setCurrentQuestion(nextQuestion);
             setCorrectAnswer(questions[nextQuestion].correct_answer);
-
-            const shuffledAnswers = shuffle([...questions[nextQuestion].incorrect_answers, questions[nextQuestion].correct_answer]);
-            setAnswers(shuffledAnswers);
+            setAnswers(shuffle([...questions[nextQuestion].incorrect_answers, questions[nextQuestion].correct_answer]));
         } else {
             alert(`You scored ${score} out of ${questions.length}`);
         }
@@ -67,7 +62,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
                         ))}
                     </div>
                 </div>
-            ) : <div>Loading...</div>}
+            ) : <div className={"text-white"}>Loading...</div>}
         </div>
     );
 }
