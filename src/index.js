@@ -8,10 +8,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ErrorPage from "./error-page";
-import Start from "./routes/start";
-import QuizProvider from "./contexts/quizContext";
-import UserProvider from "./contexts/userContext";
-import Quiz from "./routes/quiz";
+import Start from "./pages/start";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -23,22 +20,11 @@ const router = createBrowserRouter([
         element: <Start/>,
         errorElement: <ErrorPage/>,
     },
-    {
-        path: "/quiz",
-        element: <Quiz/>,
-        errorElement: <ErrorPage/>,
-    }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-      <QuizProvider>
-          <UserProvider>
-            <RouterProvider router={router} />
-          </UserProvider>
-      </QuizProvider>
-  </React.StrictMode>
+    <RouterProvider router={router} />
 );
 
 reportWebVitals();

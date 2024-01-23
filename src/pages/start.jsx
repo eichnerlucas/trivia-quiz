@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import { useUser } from "../contexts/userContext";
-import { useQuiz } from "../contexts/quizContext";
+import Quiz from "./quiz";
 
 export default function Start() {
-    const { username, setUsername } = useUser();
-    const { selectedCategory, setSelectedCategory, difficulty, setDifficulty } = useQuiz();
+    const [ username, setUsername ] = useState('');
+    const [ selectedCategory, setSelectedCategory ]= useState('');
+    const [ difficulty, setDifficulty ] = useState('easy');
     const [categories, setCategories] = useState([]);
+    const [isButtonClicked, setIsButtonClicked] = useState(false);
 
     const isValid = Boolean(username && difficulty && selectedCategory);
 
@@ -13,6 +14,8 @@ export default function Start() {
         if (!isValid) {
             evt.preventDefault();
         }
+
+        setIsButtonClicked(true)
     }
 
     useEffect(() => {
@@ -21,11 +24,13 @@ export default function Start() {
             .then((data) => {
                 setCategories(data.trivia_categories);
                 setSelectedCategory(data.trivia_categories[0].id);
-                setDifficulty('easy')
             });
     }, []);
 
     return (
+        isButtonClicked
+            ? <Quiz username={username} selectedCategory={selectedCategory} difficulty={difficulty}/>
+            : (
         <div className="flex flex-col items-center justify-center h-screen">
             <div className="w-full flex justify-center">
                 <img src={"./img/logo.png"} alt={"Trivia Quiz"}/>
@@ -76,12 +81,12 @@ export default function Start() {
                     className={`w-2/8 m-2 py-2 px-4 text-center font-semibold rounded-lg shadow-md text-white 
           ${isValid ? 'bg-amber-600 hover:bg-amber-500' : 'bg-gray-700 cursor-not-allowed'} 
           focus:outline-none focus:border-transparent`}
-                    href="/quiz"
                     onClick={handleClick}
                 >
                     Go!
                 </a>
             </div>
         </div>
+            )
     );
 }
