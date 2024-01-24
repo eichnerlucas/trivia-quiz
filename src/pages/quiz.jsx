@@ -12,6 +12,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
     const [answers, setAnswers] = useState([]);
     const [correctAnswer, setCorrectAnswer] = useState('');
     const [gameFinished, setGameFinished] = useState(false);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
 
     function decodeHTMLEntities(text) {
         const parser = new DOMParser();
@@ -47,6 +48,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
     }, [selectedCategory, difficulty]);
 
     const handleAnswerOptionClick = (answer) => {
+        setSelectedAnswer(answer);
         checkAnswerCorrectOrWrong(answer);
 
         setTimeout(() => {
@@ -58,7 +60,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
                 return;
             }
             setGameFinished(true);
-        }, 2000); // 2 seconds delay
+        }, 1000); // 2 seconds delay
     };
 
     const checkAnswerCorrectOrWrong = (answer) => {
@@ -78,7 +80,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
                     <div className="flex flex-col w-full mt-4">
                         {answers.map((answer, index) => (
                             <button
-                                className={`w-full py-2 px-4 bg-amber-400 hover:bg-amber-500 text-white font-semibold rounded-lg mt-2`}
+                                className={`w-full py-2 px-4 font-semibold rounded-lg mt-2 ${answer === selectedAnswer ? (answer === correctAnswer ? 'bg-green-400 hover:bg-green-500' : 'bg-red-400 hover:bg-red-500') : 'bg-amber-400 hover:bg-amber-500'} text-white`}
                                 key={index}
                                 onClick={() => handleAnswerOptionClick(answer)}
                                 onTouchStart={(event) => event.currentTarget.blur()}
