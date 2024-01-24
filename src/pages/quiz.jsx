@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Logo from "../components/logo";
+import GameFinished from "./gameFinished";
 
 export default function Quiz({ username, selectedCategory, difficulty }) {
     const [questions, setQuestions] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [score, setScore] = useState(0);
+    const [score, setScore] = useState({
+        correct: 0,
+        incorrect: 0
+    });
     const [answers, setAnswers] = useState([]);
     const [correctAnswer, setCorrectAnswer] = useState('');
+    const [gameFinished, setGameFinished] = useState(false);
 
     function decodeHTMLEntities(text) {
         const parser = new DOMParser();
@@ -24,7 +29,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
                 const response = await fetch(`https://opentdb.com/api.php?amount=10&category=${selectedCategory}&difficulty=${difficulty}&type=multiple`);
                 if (response.status === 429) {
                     console.log('Rate limit hit - waiting to retry.');
-                    setTimeout(fetchData, 3000); // Retry after 2 seconds
+                    setTimeout(fetchData, 5000); // Retry after 2 seconds
                     return;
                 }
 
@@ -41,27 +46,28 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
     }, [selectedCategory, difficulty]);
 
     const handleAnswerOptionClick = (answer) => {
-        if (answer === correctAnswer) {
-            setScore(score + 1);
-        }
+        checkAnswerCorrectOrWrong(answer);
 
         const nextQuestion = currentQuestion + 1;
         if (nextQuestion < questions.length) {
             setCurrentQuestion(nextQuestion);
             setCorrectAnswer(questions[nextQuestion].correct_answer);
             setAnswers(shuffle([...questions[nextQuestion].incorrect_answers, questions[nextQuestion].correct_answer]));
-        } else {
-            alert(`You scored ${score} out of ${questions.length}`);
-            setTimeout(() => {
-                window.location.reload();
-            }, 4000);
+            return;
         }
+        setGameFinished(true);
     };
+
+    const checkAnswerCorrectOrWrong = (answer) => {
+        answer === correctAnswer ? setScore({ ...score, correct: score.correct + 1 }) : setScore({ ...score, incorrect: score.incorrect + 1 })
+    }
 
     return (
         <div className="flex flex-col items-center p-6 rounded-md">
             <Logo />
-            {questions && questions.length > 0 ? (
+            {gameFinished ? (
+                <GameFinished username={username} score={score}/>
+            ) : questions && questions.length > 0 ? (
                 <div
                     className="flex flex-col items-center bg-gray-800 min-w-96 max-w-96 overflow-auto p-6 mt-4 rounded-md shadow-sm">
                     <h2 className="text-lg text-white font-bold">Question {currentQuestion + 1}:</h2>
