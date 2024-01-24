@@ -84,14 +84,14 @@ export default function Start() {
                     Back
                 </a>
 
-                <a
+                <button
                     className={`w-2/8 m-2 py-2 px-4 text-center font-semibold rounded-lg shadow-md text-white 
           ${isValid ? 'bg-amber-600 hover:bg-amber-500' : 'bg-gray-700 cursor-not-allowed'} 
           focus:outline-none focus:border-transparent`}
                     onClick={handleClick}
                 >
                     Go!
-                </a>
+                </button>
             </div>
         </div>
             )
