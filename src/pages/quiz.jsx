@@ -37,25 +37,28 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
                 setQuestions(data.results)
                 setCorrectAnswer(data.results[currentQuestion].correct_answer);
                 setAnswers(shuffle([...data.results[currentQuestion].incorrect_answers, data.results[currentQuestion].correct_answer]));
-            } catch(error) {
+            } catch (error) {
                 console.error('Error:', error);
             }
         };
 
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCategory, difficulty]);
 
     const handleAnswerOptionClick = (answer) => {
         checkAnswerCorrectOrWrong(answer);
 
-        const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < questions.length) {
-            setCurrentQuestion(nextQuestion);
-            setCorrectAnswer(questions[nextQuestion].correct_answer);
-            setAnswers(shuffle([...questions[nextQuestion].incorrect_answers, questions[nextQuestion].correct_answer]));
-            return;
-        }
-        setGameFinished(true);
+        setTimeout(() => {
+            const nextQuestion = currentQuestion + 1;
+            if (nextQuestion < questions.length) {
+                setCurrentQuestion(nextQuestion);
+                setCorrectAnswer(questions[nextQuestion].correct_answer);
+                setAnswers(shuffle([...questions[nextQuestion].incorrect_answers, questions[nextQuestion].correct_answer]));
+                return;
+            }
+            setGameFinished(true);
+        }, 2000); // 2 seconds delay
     };
 
     const checkAnswerCorrectOrWrong = (answer) => {
@@ -66,7 +69,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
         <div className="flex flex-col items-center p-6 rounded-md">
             <Logo />
             {gameFinished ? (
-                <GameFinished username={username} score={score}/>
+                <GameFinished username={username} score={score} />
             ) : questions && questions.length > 0 ? (
                 <div
                     className="flex flex-col items-center bg-gray-800 min-w-96 max-w-96 overflow-auto p-6 mt-4 rounded-md shadow-sm">
