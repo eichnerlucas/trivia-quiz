@@ -12,6 +12,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
     const [answers, setAnswers] = useState([]);
     const [correctAnswer, setCorrectAnswer] = useState('');
     const [gameFinished, setGameFinished] = useState(false);
+    const [isLocked, setIsLocked] = useState(false);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
 
     function decodeHTMLEntities(text) {
@@ -48,6 +49,10 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
     }, [selectedCategory, difficulty]);
 
     const handleAnswerOptionClick = (answer) => {
+        if (isLocked) return;
+
+        setIsLocked(true);
+
         setSelectedAnswer(answer);
         checkAnswerCorrectOrWrong(answer);
 
@@ -57,10 +62,12 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
                 setCurrentQuestion(nextQuestion);
                 setCorrectAnswer(questions[nextQuestion].correct_answer);
                 setAnswers(shuffle([...questions[nextQuestion].incorrect_answers, questions[nextQuestion].correct_answer]));
-                return;
+            } else {
+                setGameFinished(true);
             }
-            setGameFinished(true);
-        }, 1000); // 2 seconds delay
+
+            setIsLocked(false);
+        }, 1000);
     };
 
     const checkAnswerCorrectOrWrong = (answer) => {
