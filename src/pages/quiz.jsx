@@ -67,6 +67,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
             }
 
             setIsLocked(false);
+            setSelectedAnswer(null);
         }, 1000);
     };
 
@@ -87,7 +88,7 @@ export default function Quiz({ username, selectedCategory, difficulty }) {
                     <div className="flex flex-col w-full mt-4">
                         {answers.map((answer, index) => (
                             <button
-                                className={`w-full py-2 px-4 font-semibold rounded-lg mt-2 ${answer === selectedAnswer ? (answer === correctAnswer ? 'bg-green-400 hover:bg-green-500' : 'bg-red-400 hover:bg-red-500') : 'bg-amber-400 hover:bg-amber-500'} text-white`}
+                                className={`w-full py-2 px-4 font-semibold rounded-lg mt-2 text-white ${selectedAnswer ? (answer === correctAnswer ? 'bg-green-500' : (selectedAnswer === answer ? 'bg-red-500' : 'bg-amber-400')) : 'bg-amber-400'}`}
                                 key={index}
                                 onClick={() => handleAnswerOptionClick(answer)}
                                 onTouchStart={(event) => event.currentTarget.blur()}
